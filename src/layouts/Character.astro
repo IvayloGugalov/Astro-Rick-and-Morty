@@ -1,0 +1,153 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import Character from '../components/character/Character';
+// import updatePost from ''
+
+const {
+  id,
+  name,
+  status,
+  species,
+  type,
+  gender,
+  origin,
+  location,
+  image,
+  episode,
+  url,
+  created
+} = Astro.props;
+
+// if (Astro.request.method === "POST") {
+//   try {
+//     const data = await Astro.request.formData();
+//     const newstatus = data.get("status");
+//     const character = {
+//       id,
+//       name,
+//       status: newstatus,
+//       species,
+//       type,
+//       gender,
+//       origin,
+//       location,
+//       image,
+//       episode,
+//       url,
+//       created
+//     }
+//     // function updateCharacter(character: Character): Promise<void> {
+//     fetch(`http://localhost:3000/results/${character.id}`, {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Cache: 'no-cache',
+//       },
+//       body: JSON.stringify(character),
+//     }).then(res => res.json()).then(r => console.log(r))
+//     // Do something with the data
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       console.error(error.message);
+//     }
+//   }
+// }
+---
+
+<BaseLayout title={name} description={status}>
+  <main>
+    <article>
+      <div class="hero-image">
+        {image && <Image width={480} height={240} src={image} alt="" />}
+      </div>
+      <div class="prose">
+        <div class="title">
+          <div class="date">
+            Created on <FormattedDate date={new Date(created)} />
+          </div>
+          <h1>{name}</h1>
+          <hr />
+        </div>
+        <form  method="POST">
+          <button>Submit</button>
+          <div class="character-info">
+            <p>Status: </p><input value={status}></input>
+            <p>Species: {species}</p>
+            <p>Type: {type}</p>
+            <p>Gender: {gender}</p>
+            <p>Origin: <a href={origin.link}>{origin.name}</a></p>
+            <p>Last Known Location: <a href={location.link}>{location.name}</a></p>
+            <p>URL: <a href={url}>{url}</a></p>
+            <p>Episodes:</p>
+            <p>{episode.join(', ')}</p>
+          </div>
+
+        </form>
+        <slot />
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    width: calc(100% - 2em);
+    max-width: 100%;
+    margin: 0;
+  }
+  .hero-image {
+    width: 100%;
+  }
+  .hero-image img {
+    display: block;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+  }
+  .prose {
+    width: 720px;
+    max-width: calc(100% - 2em);
+    margin: auto;
+    padding: 1em;
+    color: rgb(var(--gray-dark));
+  }
+  .title {
+    margin-bottom: 1em;
+    padding: 1em 0;
+    text-align: center;
+    line-height: 1;
+  }
+  .title h1 {
+    margin: 0 0 0.5em 0;
+  }
+  .date {
+    margin-bottom: 0.5em;
+    color: rgb(var(--gray));
+  }
+  .last-updated-on {
+    font-style: italic;
+  }
+  .character-info {
+    background-color: #f8f8f8;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    margin-top: 20px;
+  }
+
+  .character-info p {
+    margin: 5px 0;
+    font-size: 18px;
+  }
+
+  .character-info a {
+    text-decoration: none;
+    color: #007bff;
+  }
+
+  .character-info a:hover {
+    text-decoration: underline;
+  }
+</style>

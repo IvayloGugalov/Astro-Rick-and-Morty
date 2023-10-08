@@ -1,0 +1,22 @@
+---
+import Character from '../../layouts/Character.astro';
+import type { Character as CharacterType } from '../../types/character';
+
+// export async function getStaticPaths() {
+//   const response = await fetch("http://localhost:3000/results");
+//   const characters = (await response.json()) as CharacterType[];
+//   return characters.map((character: CharacterType) => ({
+//     params: {
+//       slug: character.name
+//     },
+//     props: {
+//       character
+//     },
+//   }));
+// }
+const response = await fetch("http://localhost:3000/results");
+const characters = (await response.json()) as CharacterType[];
+const character = characters.find((p) => p.name === Astro.params.slug);
+---
+
+<Character {...character} />

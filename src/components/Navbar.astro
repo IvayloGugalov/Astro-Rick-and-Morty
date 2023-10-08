@@ -1,0 +1,96 @@
+---
+import NavLink from './NavLink.astro';
+import { SITE_TITLE } from '../consts';
+import { iconPaths } from '../icons';
+import Icon from './Icon.astro';
+
+/** Icon links to social media — edit these with links to your profiles! */
+const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[] = [
+	{ label: 'Twitter', href: 'https://twitter.com  ', icon: 'twitter-logo' },
+	{ label: 'Twitch', href: 'https://twitch.tv  ', icon: 'twitch-logo' },
+	{ label: 'GitHub', href: 'https://github.com  ', icon: 'github-logo' },
+	{ label: 'CodePen', href: 'https://codepen.io  ', icon: 'codepen-logo' },
+	{ label: 'dribbble', href: 'https://dribbble.com  ', icon: 'dribbble-logo' },
+	{ label: 'YouTube', href: 'https://www.youtube.com', icon: 'youtube-logo' },
+];
+---
+
+<header>
+  <nav>
+    <h2><a href="/">{SITE_TITLE}</a></h2>
+    <div class="internal-links">
+      <NavLink href="/">Home</NavLink>
+      <NavLink href="/characters">Characters</NavLink>
+    </div>
+    <div class="social-links">
+      {
+        iconLinks.map(({ href, icon, label }) => (
+          <a href={href} class="social">
+            <span class="sr-only">{label}</span>
+            <Icon icon={icon} />
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+<style>
+  header {
+    margin: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    padding: 0 1em;
+    background: white;
+    box-shadow: 0 2px 8px rgba(var(--black), 5%);
+  }
+  h2 {
+    margin: 0;
+    font-size: 1em;
+  }
+
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  nav {
+    padding: 0 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav a {
+    padding: 1em 0.5em;
+    color: var(--black);
+    border-bottom: 4px solid transparent;
+    text-decoration: none;
+  }
+  nav a.active {
+    text-decoration: none;
+    border-bottom-color: var(--accent);
+  }
+  nav .social {
+    padding: 0;
+    display: flex;
+    text-decoration: none;
+    color: var(--accent-text-over);
+    transition: color var(--theme-transition);
+  }
+  nav .social:hover,
+	.social:focus {
+		color: var(--accent);
+	}
+  nav .social-links,
+  nav .social-links a {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: var(--icon-size);
+}
+  @media (max-width: 720px) {
+    .social-links {
+      display: none;
+    }
+  }
+</style>
