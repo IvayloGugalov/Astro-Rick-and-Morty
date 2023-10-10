@@ -1,0 +1,73 @@
+---
+import Icon from './Icon.astro';
+
+type Props = {
+  label?: string,
+  showButton?: boolean
+}
+const { label, showButton = true } = Astro.props;
+---
+
+<div class="accordion-section">
+  <div class="accordion-header">
+    {label && <label>{label}</label>}
+    {showButton && (
+      <button id="accordion-button">
+        <Icon icon='caret-down' />
+      </button>
+    )}
+  </div>
+  <div class="accordion-content">
+    <slot />
+  </div>
+</div>
+
+<script is:inline>
+  const accordionSection = document.querySelector('.accordion-section');
+  // Add a click event listener to each section's header
+  const header = accordionSection.querySelector('.accordion-header');
+  const button = document.querySelector('#accordion-button')
+  header.addEventListener('click', () => {
+    // Toggle the "expanded" class to show/hide the content
+    accordionSection.classList.toggle('expanded');
+    if (!button) return;
+    if (accordionSection.classList.contains('expanded')) {
+      button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256" aria-hidden="true" stroke="currentcolor" fill="currentcolor" class="astro-patnjmll" data-astro-cid-patnjmll=""><g id="icon" data-astro-cid-patnjmll=""><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"></path></path></g></svg>`
+    } else {
+      button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256" aria-hidden="true" stroke="currentcolor" fill="currentcolor" class="astro-patnjmll" data-astro-cid-patnjmll=""><g id="icon" data-astro-cid-patnjmll=""><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"></path></g></svg>`
+    }
+  });
+</script>
+
+<style>
+  .accordion-section {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    border-radius: 0.35rem;
+  }
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0.75rem;
+    padding-bottom: 0.65rem;
+    cursor: pointer;
+  }
+  .accordion-content {
+    opacity: 0;
+    transition: .35s ease-in-out;
+    height: 0;
+    padding: 0 1rem;
+  }
+  .accordion-section.expanded .accordion-header {
+    border-bottom: 1px solid #ccc;
+    background-color: #f2f2f2;
+  }
+  .accordion-section.expanded .accordion-content {
+    opacity: 1;
+    height: fit-content;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 1rem;
+  }
+</style>

@@ -2,23 +2,18 @@
 import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
-import Character from '../components/character/Character';
+import { type Character as CharacterType } from '../types/character';
+import TextField from '../components/TextField.astro';
+import Accordion from '../components/Accordion.astro';
+// import Character from '../components/character/Character';
 // import updatePost from ''
 
-const {
-  id,
-  name,
-  status,
-  species,
-  type,
-  gender,
-  origin,
-  location,
-  image,
-  episode,
-  url,
-  created
-} = Astro.props;
+
+export interface Props {
+  character?: CharacterType
+}
+
+const { character } = Astro.props as Props;
 
 // if (Astro.request.method === "POST") {
 //   try {
@@ -54,49 +49,49 @@ const {
 //     }
 //   }
 // }
+
+
 ---
 
-<BaseLayout title={name} description={status}>
+<BaseLayout title={character?.name} description={character?.status}>
   <main>
-    <article>
-      <div class="hero-image">
-        {image && <Image width={480} height={240} src={image} alt="" />}
-      </div>
-      <div class="prose">
-        <div class="title">
-          <div class="date">
-            Created on <FormattedDate date={new Date(created)} />
+    {character === null
+      ? (<article>Not found</article>)
+      : (
+        <article>
+          <div class="hero-image">
+            {character?.image && <Image width={480} height={240} src={character?.image || ""} alt="" />}
           </div>
-          <h1>{name}</h1>
-          <hr />
-        </div>
-        <form  method="POST">
-          <button>Submit</button>
-          <div class="character-info">
-            <p>Status: </p><input value={status}></input>
-            <p>Species: {species}</p>
-            <p>Type: {type}</p>
-            <p>Gender: {gender}</p>
-            <p>Origin: <a href={origin.link}>{origin.name}</a></p>
-            <p>Last Known Location: <a href={location.link}>{location.name}</a></p>
-            <p>URL: <a href={url}>{url}</a></p>
-            <p>Episodes:</p>
-            <p>{episode.join(', ')}</p>
-          </div>
+          <div class="prose">
+            <div class="title">
+              <div class="date">
+                Created on <FormattedDate date={new Date(character?.created || "")} />
+              </div>
+              <h1>{character?.name}</h1>
+              <hr />
+            </div>
+            <div class="character-info">
+              <TextField label='Status:' defaultValue={character?.status} />
+              <TextField label='Species:' defaultValue={character?.species} />
+              {character?.type && <TextField label='Type:' defaultValue={character?.type} />}
+              <TextField label='Gender:' defaultValue={character?.gender} />
+              <p>Origin: <a href={character?.origin?.url}>{character?.origin.name}</a></p>
+              <p>Last Known Location: <a href={character?.location?.url}>{character?.location.name}</a></p>
+              <p>URL: <a href={character?.url}>{character?.url}</a></p>
+              <Accordion label="Episodes:">
+                <p>{character?.episode.join(', ')}</p>
+              </Accordion>
+            </div>
 
-        </form>
-        <slot />
-      </div>
-    </article>
+            <slot />
+          </div>
+        </article>
+      )
+    }
   </main>
 </BaseLayout>
 
 <style>
-  main {
-    width: calc(100% - 2em);
-    max-width: 100%;
-    margin: 0;
-  }
   .hero-image {
     width: 100%;
   }
@@ -120,7 +115,7 @@ const {
     line-height: 1;
   }
   .title h1 {
-    margin: 0 0 0.5em 0;
+    margin: 0 0 0.25em 0;
   }
   .date {
     margin-bottom: 0.5em;
@@ -130,19 +125,20 @@ const {
     font-style: italic;
   }
   .character-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     background-color: #f8f8f8;
-    padding: 10px;
+    padding: 2rem;
     border: 1px solid #ddd;
     border-radius: 1rem;
-    margin-top: 20px;
   }
-
   .character-info p {
     margin: 5px 0;
     font-size: 18px;
   }
-
   .character-info a {
+    cursor: pointer;
     text-decoration: none;
     color: #007bff;
   }

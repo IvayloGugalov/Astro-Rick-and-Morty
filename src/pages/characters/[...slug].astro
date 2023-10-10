@@ -1,5 +1,6 @@
 ---
 import Character from '../../layouts/Character.astro';
+import slugCreator from '../../lib/slugCreator';
 import type { Character as CharacterType } from '../../types/character';
 
 // export async function getStaticPaths() {
@@ -16,7 +17,7 @@ import type { Character as CharacterType } from '../../types/character';
 // }
 const response = await fetch("http://localhost:3000/results");
 const characters = (await response.json()) as CharacterType[];
-const character = characters.find((p) => p.name === Astro.params.slug);
+const character = characters.find((p) => slugCreator(p.name) === Astro.params.slug);
 ---
 
-<Character {...character} />
+<Character {character} />

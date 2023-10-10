@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import { type Character } from '../../types/character'
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import slugCreator from '../../lib/slugCreator'
 
 const characters = await fetch("http://localhost:3000/results")
   .then((response) => response.json())
@@ -16,7 +17,7 @@ const characters = await fetch("http://localhost:3000/results")
       <ul>
         {characters.map((character: Character) => (
           <li>
-            <a href={`/characters/${character.name}/`}>
+            <a href={`/characters/${slugCreator(character.name)}/`}>
               <Image width={720} height={360} src={character.image} alt="" />
               <h4 class="title">{character.name}</h4>
               <p class="date">

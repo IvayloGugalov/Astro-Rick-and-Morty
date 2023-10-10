@@ -5,9 +5,10 @@ interface Props {
 
 const { date } = Astro.props;
 const parsedDate = new Date(date);
+console.log(parsedDate)
 ---
 
-<time datetime={parsedDate.toISOString()}>
+<time datetime={parsedDate ? parsedDate.toISOString() : new Date().toISOString()}>
   {
     parsedDate.toLocaleString('en-us', {
       year: 'numeric',

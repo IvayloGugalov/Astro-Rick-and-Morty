@@ -7,11 +7,11 @@ export type Character = {
   gender: 'Female' | 'Male' | 'Genderless' | 'unknown';
   origin: {
     name: string;
-    link: string;
+    url: string;
   };
   location: {
     name: string;
-    link: string;
+    url: string;
   };
   image: string;
   episode: string[];
