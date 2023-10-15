@@ -7,5 +7,5 @@ import preact from "@astrojs/preact";
 export default defineConfig({
   output: 'server',
   site: 'https://example.com',
-  integrations: [mdx(), sitemap(), preact()]
+  integrations: [mdx(), sitemap(), preact({ compat: true, include: ['**/preact/*'], })]
 });

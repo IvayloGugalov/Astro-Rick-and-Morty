@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
+import Notification from "../components/notification/Notification";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 interface Props {
@@ -20,6 +21,37 @@ const { title, description }: Props = Astro.props;
   <body>
     <Navbar title={title ?? SITE_TITLE} />
     <slot />
-    <Footer />
+    <Notification client:load type="info" />
   </body>
+  <button class="but" id="openDialog">
+    Click
+  </button>
+  <div class="footer-wrapper">
+    <Footer />
+  </div>
 </html>
+
+<script >
+  import { isNotificationShown } from '../stores/appStore.js';
+
+  // Set the store to true when the button is clicked
+  function openDialog() {
+    isNotificationShown.set(true);
+  }
+
+  // Add an event listener to the button
+  const dial = document?.getElementById('openDialog');
+  dial?.addEventListener('click', openDialog);
+</script>
+
+<style>
+  .but {
+    margin-top: 10rem;
+  }
+  .footer-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+</style>
